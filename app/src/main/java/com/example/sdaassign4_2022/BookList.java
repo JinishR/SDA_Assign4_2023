@@ -41,12 +41,11 @@ public class BookList extends Fragment {
         //add array for each item
         ArrayList<String> mAuthor = new ArrayList<>();
         ArrayList<String> mTitle = new ArrayList<>();
-        ArrayList<Integer> mImageID = new ArrayList<>();
+        ArrayList<String> mImageID = new ArrayList<>(); // create new ArrayList for image IDs
 
         //simple loop here to add the images to the array without typing each one
         for(int i=1;i<=14;i++) {
-            int id = getResources().getIdentifier("sku1000" + i, "drawable",
-                    root.getContext().getPackageName());
+            String id = "sku1000" + i;
             mImageID.add(id);
         }
 

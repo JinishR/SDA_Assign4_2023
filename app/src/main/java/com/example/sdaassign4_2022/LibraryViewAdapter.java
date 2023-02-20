@@ -1,60 +1,53 @@
 package com.example.sdaassign4_2022;
 
-        /*
-         * Copyright (C) 2016 The Android Open Source Project
-         *
-         * Licensed under the Apache License, Version 2.0 (the "License");
-         * you may not use this file except in compliance with the License.
-         * You may obtain a copy of the License at
-         *
-         *      http://www.apache.org/licenses/LICENSE-2.0
-         *
-         * Unless required by applicable law or agreed to in writing, software
-         * distributed under the License is distributed on an "AS IS" BASIS,
-         * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-         * See the License for the specific language governing permissions and
-         * limitations under the License.
-         */
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
-        import android.content.Context;
-        import android.content.Intent;
-        import android.util.Log;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.widget.Button;
-        import android.widget.ImageView;
-        import android.widget.RelativeLayout;
-        import android.widget.TextView;
-        import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
-        import androidx.annotation.NonNull;
-        import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
-        import java.util.ArrayList;
+import java.util.ArrayList;
 
 
-/*
- * @author Chris Coughlan 2019
- */
 public class LibraryViewAdapter extends RecyclerView.Adapter<LibraryViewAdapter.ViewHolder> {
-    private static final String TAG = "RecyclerViewAdapter";
+
+    private static final String TAG = "LibraryViewAdapter";
     private Context mNewContext;
 
-    //add array for each item\
+    // Add arrays for each item
     private ArrayList<String> mAuthor;
     private ArrayList<String> mTitle;
-    private ArrayList<Integer> mImageID;
+    private ArrayList<String> mImageUrls;
 
-    LibraryViewAdapter(Context mNewContext, ArrayList<String> author, ArrayList<String> title, ArrayList<Integer> imageId) {
+    private FirebaseStorage mFirebaseStorage;
+    private StorageReference mStorageReference;
+
+    LibraryViewAdapter(Context mNewContext, ArrayList<String> author, ArrayList<String> title, ArrayList<String> imageUrls) {
         this.mNewContext = mNewContext;
         this.mAuthor = author;
         this.mTitle = title;
-        this.mImageID = imageId;
-
+        this.mImageUrls = imageUrls;
+        mFirebaseStorage = FirebaseStorage.getInstance();
+        mStorageReference = mFirebaseStorage.getReference();
     }
 
-    //declare methods
+
+
+
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -68,14 +61,19 @@ public class LibraryViewAdapter extends RecyclerView.Adapter<LibraryViewAdapter.
 
         viewHolder.authorText.setText(mAuthor.get(position));
         viewHolder.titleText.setText(mTitle.get(position));
-        viewHolder.imageItem.setImageResource(mImageID.get(position));
+        String imageUrl = mImageUrls.get(position);
 
-        //should check here to see if the book is available.
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            StorageReference imageRef = mStorageReference.child(imageUrl);
+            Glide.with(mNewContext).load(imageRef).into(viewHolder.imageItem);
+        } else {
+            viewHolder.imageItem.setImageResource(R.drawable.sku10001);
+        }
+
         viewHolder.checkOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
                 Toast.makeText(mNewContext, mTitle.get(position), Toast.LENGTH_SHORT).show();
-                //...
                 Intent myOrder = new Intent (mNewContext, CheckOut.class);
                 mNewContext.startActivity(myOrder);
             }
@@ -88,8 +86,8 @@ public class LibraryViewAdapter extends RecyclerView.Adapter<LibraryViewAdapter.
         return mAuthor.size();
     }
 
-    //view holder class for recycler_list_item.xml
-    class ViewHolder extends RecyclerView.ViewHolder{
+    // View holder class for recycler_list_item.xml
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imageItem;
         TextView authorText;
@@ -100,7 +98,7 @@ public class LibraryViewAdapter extends RecyclerView.Adapter<LibraryViewAdapter.
         ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            //grab the image, the text and the layout id's
+            // Grab the image, the text, and the layout ids
             imageItem = itemView.findViewById(R.id.bookImage);
             authorText = itemView.findViewById(R.id.authorText);
             titleText = itemView.findViewById(R.id.bookTitle);

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "440464163776",
+    "project_id": "sdaassign4-da71b",
+    "storage_bucket": "sdaassign4-da71b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:440464163776:android:7a2a678253afe7de013e25",
+        "android_client_info": {
+          "package_name": "com.example.sdaassign4_2022"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "440464163776-alockerskid590i00n8n42h636n7u5l0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZA_VagJbPmPZiyy9eGbZZVH6--p0XDq8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "440464163776-alockerskid590i00n8n42h636n7u5l0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
